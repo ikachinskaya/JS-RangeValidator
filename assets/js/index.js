@@ -2,25 +2,32 @@
 class RangeValidator {
   constructor(from, to) {
     // if (from > to) {
-    //   return new RangeError(
+    //   throw new RangeError(
     //     "Начальное значение диапазона не может быть больше конечного"
     //   );
     // }
     this.from = from;
     // if (to < from) {
-    //   return new RangeError("Конечное значение диапазона не может быть меньше начального");
+    //   throw new RangeError("Конечное значение диапазона не может быть меньше начального");
     // }
     this.to = to;
   }
 
   set from(newFrom) {
-    if (newFrom === undefined) {
-      this._from = newFrom;
-    }
-
     if (isNaN(newFrom) || typeof newFrom !== "number") {
       throw new TypeError("Invalid type");
     }
+
+    // if (this.to === undefined) {
+    //   this._from = newFrom;
+    // }
+    if (newFrom > this.to || typeof this.to !== "undefined") {
+      throw new RangeError(
+        "Начальное значение диапазона не может быть больше конечного"
+      );
+    }
+
+    this._from = newFrom;
   }
 
   get from() {
@@ -28,13 +35,13 @@ class RangeValidator {
   }
 
   set to(newTo) {
-    if (this.to < this.from) {
-      return new RangeError(
-        "Конечное значение диапазона не может быть меньше начального"
-      );
-    }
     if (isNaN(newTo) || typeof newTo !== "number") {
       throw new TypeError("Invalid type");
+    }
+    if (newTo < this.from || typeof this.from !== "undefined") {
+      throw new RangeError(
+        "Конечное значение диапазона не может быть меньше начального"
+      );
     }
     this._to = newTo;
   }
