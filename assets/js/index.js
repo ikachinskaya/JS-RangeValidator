@@ -1,7 +1,7 @@
 "use strict";
 class RangeValidator {
-  constructor(from, to) {   
-    this.from = from;   
+  constructor(from, to) {
+    this.from = from;
     this.to = to;
   }
 
@@ -27,7 +27,7 @@ class RangeValidator {
     if (isNaN(newTo) || typeof newTo !== "number") {
       throw new TypeError("Invalid type");
     }
-   
+
     if (newTo < this.from) {
       throw new RangeError(
         "Конечное значение диапазона не может быть меньше начального"
@@ -46,13 +46,18 @@ class RangeValidator {
     return array;
   }
 
-  validate = (value) =>
-    value >= this.from && value <= this.to
-      ? value
-      : new RangeError("Число не входит в заданный диапазон");
+  validate(value) {
+    if (isNaN(value)) {
+      throw new TypeError("Invalid type");
+    }
+    if (value >= this.from && value <= this.to) {
+      return value;
+    } else {
+      throw new RangeError("Число не входит в заданный диапазон");
+    }
+  }
 }
-
-const rangeValidator = new RangeValidator(0, 10);
+const rangeValidator = new RangeValidator(0, 20);
 console.log(rangeValidator);
 console.log(rangeValidator.getterRange());
-console.log(rangeValidator.validate(5));
+console.log(rangeValidator.validate(15));
